@@ -21,5 +21,14 @@ set(SOURCE
 #			test_fr_comia.h
 #	)
 
+find_package(OpenCV REQUIRED)
+if(OpenCV_FOUND)
+	message("-- Opencv Found")
+endif()
+
 add_executable(${target_name} ${SOURCE}) # ${HEADERS}
-# TARGET_LINK_LIBRARIES(${target_name} namepace::library)
+find_package(dlib REQUIRED) # Look for the precompiled installation instead.
+set_target_properties(dlib::dlib PROPERTIES
+	INTERFACE_COMPILE_OPTIONS ""
+)
+target_link_libraries(${target_name} ${OpenCV_LIBS} dlib::dlib)
