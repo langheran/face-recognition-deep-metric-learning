@@ -19,13 +19,12 @@ cmake -G "Ninja" ^
 -DZLIB_INCLUDE_DIR=..\dlib\external\zlib ^
 -DZLIB_LIBRARY_RELEASE=..\dlib\external\zlib ^
 -DCMAKE_BUILD_TYPE=Debug ^
--DCMAKE_INSTALL_PREFIX=debug_install ..
+-DCMAKE_INSTALL_PREFIX=install ..
 
 cmake --build . --config Debug --target all
 
 ninja install
 
-rd /s /q "C:\dlib-19.8\debug_install"
-echo d | xcopy "./debug_install" "C:\dlib-19.8\debug_install" /s /e /y
-
 cd ..
+rd /s /q debug_build
+echo d | xcopy build "C:\dlib-19.8\debug_build" /s /e /y

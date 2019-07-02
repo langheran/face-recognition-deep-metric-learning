@@ -23,7 +23,6 @@ cmake --build . --config Release --target all
 
 ninja install
 
-rd /s /q "C:\dlib-19.8\release_install"
-echo d | xcopy "./release_install" "C:\dlib-19.8\release_install" /s /e /y
-
 cd ..
+rd /s /q release_build
+echo d | xcopy build "C:\dlib-19.8\release_build" /s /e /y
