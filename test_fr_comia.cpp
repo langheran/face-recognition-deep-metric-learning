@@ -25,6 +25,15 @@ const char *keys_fr_comia =
         "{res_net |resources/dlib_face_recognition_resnet_model_v1.dat|resnet model}"
     };
 
+void showImage(cv::Mat& vfeed, cv::Mat& vfeed_rz, float& monitor_height)
+{
+    vfeed_rz = vfeed.clone();
+    if(vfeed.rows > monitor_height)
+        cv::resize(vfeed, vfeed_rz, cv::Size(), monitor_height / vfeed.rows, monitor_height / vfeed.rows);
+    cv::imshow("Faces", vfeed_rz);
+    cv::waitKey();
+}
+
 int main(int argc, const char *argv[])
 {
     help_fr_comia();
@@ -53,12 +62,7 @@ int main(int argc, const char *argv[])
 
         cv::namedWindow("Faces");
         float monitor_height = 580;
-        vfeed_rz = vfeed.clone();
-        if(vfeed.rows > monitor_height)
-            cv::resize(vfeed, vfeed_rz, cv::Size(), monitor_height / vfeed.rows, monitor_height / vfeed.rows);
-        cv::imshow("Faces", vfeed_rz);
-        cv::waitKey();
-
+        showImage(vfeed, vfeed_rz, monitor_height);
         ///////////////////////////////////////////////////////
         // STEP 1: Detect faces
         ///////////////////////////////////////////////////////
@@ -76,7 +80,8 @@ int main(int argc, const char *argv[])
         }
         //-- Detect faces
         std::vector<cv::Rect> faces;
-        cascade.detectMultiScale(gray, faces, 1.2, 2, 0 |                           cv::CASCADE_SCALE_IMAGE
+        cascade.detectMultiScale(gray, faces, 1.2, 2, 0 
+        |cv::CASCADE_SCALE_IMAGE
             // | cv::CASCADE_DO_ROUGH_SEARCH
             // | cv::CASCADE_FIND_BIGGEST_OBJECT
         );
@@ -86,6 +91,7 @@ int main(int argc, const char *argv[])
         }
 
         std::cout << faces.size() << " faces detected" << std::endl;
+        showImage(vfeed, vfeed_rz, monitor_height);
     }
     catch (cv::Exception &e)
     {
