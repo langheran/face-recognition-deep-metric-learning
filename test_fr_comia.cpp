@@ -21,17 +21,38 @@ const char *keys_fr_comia =
     {
         "{image |../../resources/bald_guys.jpg|input image}"
         "{cascade |../../resources/haarcascade_frontalface_default.xml|haar cascade}"
-        "{shape_predictor |../../shape_predictor_68_face_landmarks.dat}|shape predictor}"
-        "{res_net |../../resources/dlib_face_recognition_resnet_model_v1.dat}|resnet model}"};
+        "{shape_predictor |../../resources/shape_predictor_68_face_landmarks.dat}|shape predictor}"
+        "{res_net |../../resources/dlib_face_recognition_resnet_model_v1.dat}|resnet model}"
+    };
 
 int main(int argc, const char *argv[])
 {
     help_fr_comia();
-    cv::CommandLineParser parser(argc, argv, keys_fr_comia);
-    std::string fimage = parser.get<std::string>("image");
-    std::cout << "Loading "
-              << "'" << fimage << "'"
-              << " image...";
+    try
+    {
+        cv::CommandLineParser parser(argc, argv, keys_fr_comia);
+        std::string fimage = parser.get<std::string>("image");
+        std::cout << "Loading "
+                  << "'" << fimage << "'"
+                  << " image...";
+    }
+    catch (cv::Exception &e)
+    {
+        std::cerr << e.msg << std::endl; // output exception message
+    }
+    catch (const std::exception &ex)
+    {
+        std::cerr << ex.what() << '\n';
+    }
+    catch (const std::string &ex)
+    {
+        std::cerr << ex << '\n';
+    }
+    catch (...)
+    {
+        std::cerr << "Error" << '\n';
+    }
+
     fflush(stdout);
     std::cin.get();
 }
