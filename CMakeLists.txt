@@ -34,14 +34,6 @@ find_package(dlib
 	REQUIRED
 ) # Look for the precompiled installation instead.
 
-get_target_property(DLIB_DEBUG_LOCATION dlib::dlib LOCATION)
-string(REPLACE debug release DLIB_RELEASE_LOCATION ${DLIB_DEBUG_LOCATION})
-
-set(DLIB_LIBRARY
-		"$<$<NOT:$<CONFIG:DEBUG>>:${DLIB_RELEASE_LOCATION}>"
-		"$<$<CONFIG:DEBUG>:${DLIB_DEBUG_LOCATION}>"
-)
-
 set_target_properties(dlib::dlib PROPERTIES
 	INTERFACE_COMPILE_OPTIONS ""
 )
