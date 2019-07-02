@@ -13,8 +13,14 @@ static void help_fr_comia()
 const char* keys_fr_comia = 
 {
     "{image | ../../resources/bald_guys.jpg}"
-    "{cascade | ../../resources/bald_guys.jpg}"
-    "{shape_predictor | ../../resources/bald_guys.jpg}"
-    "{res_net | ../../resources/bald_guys.jpg}"
+    "{cascade | ../../resources/haarcascade_frontalface_default.xml}"
+    "{shape_predictor | ../../shape_predictor_68_face_landmarks.dat}"
+    "{res_net | ../../resources/dlib_face_recognition_resnet_model_v1.dat}"
+}
 
+int main(int argc, const char * argv[])
+{
+    help_fr_comia();
+
+    
 }
