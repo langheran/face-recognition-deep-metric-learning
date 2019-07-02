@@ -10,10 +10,10 @@
             "request": "launch",
             "program": "${workspaceFolder}/build/Debug/test_fr_comia.exe",
             "args": [
-                "-image=../../resources/bald_guys.jpg",
-                "-cascade=0",
-                "-shape_predictor=0",
-                "-res_net=0"
+                "-image=resources/bald_guys.jpg",
+                "-cascade=resources/haarcascade_frontalface_default.xml",
+                "-shape_predictor=resources/shape_predictor_68_face_landmarks.dat",
+                "-res_net=resources/dlib_face_recognition_resnet_model_v1.dat"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
