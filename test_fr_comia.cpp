@@ -21,8 +21,8 @@ const char *keys_fr_comia =
     {
         "{image |../../resources/bald_guys.jpg|input image}"
         "{cascade |../../resources/haarcascade_frontalface_default.xml|haar cascade}"
-        "{shape_predictor |../../resources/shape_predictor_68_face_landmarks.dat}|shape predictor}"
-        "{res_net |../../resources/dlib_face_recognition_resnet_model_v1.dat}|resnet model}"
+        "{shape_predictor |../../resources/shape_predictor_68_face_landmarks.dat|shape predictor}"
+        "{res_net |../../resources/dlib_face_recognition_resnet_model_v1.dat|resnet model}"
     };
 
 int main(int argc, const char *argv[])
