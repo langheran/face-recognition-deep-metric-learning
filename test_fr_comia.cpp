@@ -1,16 +1,11 @@
-// #include <iostream>
-// #include <string>
-
-// #include <opencv2/opencv.hpp>
-// #include <opencv2/core/utility.hpp>
-
-#include <opencv2/opencv.hpp>
+#include <stdio.h>
 #include <string>
 
-#include <dlib/dnn.h>
-#include <dlib/image_io.h>
-#include <dlib/misc_api.h>
+#include <opencv2/opencv.hpp>
+
 #include <dlib/opencv.h>
+#include <dlib/image_processing/frontal_face_detector.h>
+#include <dlib/image_processing.h>
 
 static void help_fr_comia()
 {
@@ -24,10 +19,11 @@ static void help_fr_comia()
 
 const char *keys_fr_comia =
     {
-        "{image|../../resources/bald_guys.jpg}"
-        "{cascade|../../resources/haarcascade_frontalface_default.xml}"
-        "{shape_predictor|../../shape_predictor_68_face_landmarks.dat}"
-        "{res_net|../../resources/dlib_face_recognition_resnet_model_v1.dat}"};
+        "{image |../../resources/bald_guys.jpg|input image}"
+        "{cascade |../../resources/haarcascade_frontalface_default.xml|haar cascade}"
+        "{shape_predictor |../../shape_predictor_68_face_landmarks.dat}|shape predictor"
+        "{res_net |../../resources/dlib_face_recognition_resnet_model_v1.dat}|resnet model"
+    };
 
 int main(int argc, const char *argv[])
 {
