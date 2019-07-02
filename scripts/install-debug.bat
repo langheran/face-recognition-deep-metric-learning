@@ -28,3 +28,4 @@ ninja install
 cd ..
 rd /s /q debug_build
 echo d | xcopy build "C:\dlib-19.8\debug_build" /s /e /y
+echo f | xcopy "C:\dlib-19.8\debug_build\dlib\CMakeFiles\dlib.dir\dlib.pdb" "C:\dlib-19.8\debug_build\install\lib" /s /e /y
