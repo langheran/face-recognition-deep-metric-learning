@@ -27,6 +27,7 @@ if(OpenCV_FOUND)
 endif()
 
 add_executable(${target_name} ${SOURCE}) # ${HEADERS}
+# include(C:/dlib-19.8/dlib/cmake)
 set(DLIB_RELEASE "C:/dlib-19.8/release_install/lib/cmake/dlib")
 set(DLIB_DEBUG "C:/dlib-19.8/debug_install/lib/cmake/dlib")
 find_package(dlib 
