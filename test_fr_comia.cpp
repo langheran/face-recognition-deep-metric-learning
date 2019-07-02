@@ -35,6 +35,28 @@ int main(int argc, const char *argv[])
         std::cout << "Loading "
                   << "'" << fimage << "'"
                   << " image...";
+        cv::Mat image = cv::imread(fimage, cv::IMREAD_COLOR);
+        if(image.empty())
+        {
+            std::cout << "ERROR in " << fimage << std::endl;
+            return -1;
+        }
+        else
+            std::cout << "DONE" << std::endl;
+        cv::Mat vfeed = image.clone();
+        cv::Mat vfeed_rz;
+
+        //-- convert  to grayscale
+        cv::Mat gray;
+        cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
+
+        cv::namedWindow("Faces");
+        float monitor_height = 580;
+        vfeed_rz = vfeed.clone();
+        if(vfeed.rows > monitor_height)
+            cv::resize(vfeed, vfeed_rz, cv::Size(), monitor_height / vfeed.rows, monitor_height / vfeed.rows);
+        cv::imshow("Faces", vfeed_rz);
+        cv::waitKey();
     }
     catch (cv::Exception &e)
     {
