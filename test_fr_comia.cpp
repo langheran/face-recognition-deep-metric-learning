@@ -57,6 +57,33 @@ int main(int argc, const char *argv[])
             cv::resize(vfeed, vfeed_rz, cv::Size(), monitor_height / vfeed.rows, monitor_height / vfeed.rows);
         cv::imshow("Faces", vfeed_rz);
         cv::waitKey();
+
+        ///////////////////////////////////////////////////////
+        // STEP 1: Detect faces
+        ///////////////////////////////////////////////////////
+
+        //-- Create and load detector
+        std::cout << "Detecting faces...";
+        fflush(stdout);
+        cv::CascadeClassifier cascade;
+        std::string fcascade = parser.get<std::string>("cascade");
+        if(!cascade.load(fcascade))
+        {
+            std::cout << "ERROR loading: " << fcascade << std::endl;
+            return -1;
+        }
+        //-- Detect faces
+        std::vector<cv::Rect> faces;
+        cascade.detectMultiScale(gray, faces, 1.2, 2, 0 |                           cv::CASCADE_SCALE_IMAGE
+            // | cv::CASCADE_DO_ROUGH_SEARCH
+            // | cv::CASCADE_FIND_BIGGEST_OBJECT
+        );
+        //-- Visual feedback, draw face bounding box
+        for (int i = 0; i < (int)faces.size(); i++) {
+            cv::rectangle(vfeed, faces[i], cv::Scalar(rand() % 256, rand() % 256, rand() % 256, 3));
+        }
+
+        std::cout << faces.size() << " faces detected" << std::endl;
     }
     catch (cv::Exception &e)
     {
