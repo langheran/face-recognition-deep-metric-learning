@@ -27,7 +27,21 @@ if(OpenCV_FOUND)
 endif()
 
 add_executable(${target_name} ${SOURCE}) # ${HEADERS}
-find_package(dlib REQUIRED) # Look for the precompiled installation instead.
+set(DLIB_RELEASE "C:/dlib-19.8/release_install/lib/cmake/dlib")
+set(DLIB_DEBUG "C:/dlib-19.8/debug_install/lib/cmake/dlib")
+find_package(dlib 
+	HINTS "${DLIB_DEBUG}"
+	REQUIRED
+) # Look for the precompiled installation instead.
+
+get_target_property(DLIB_DEBUG_LOCATION dlib::dlib LOCATION)
+string(REPLACE debug release DLIB_RELEASE_LOCATION ${DLIB_DEBUG_LOCATION})
+
+set(DLIB_LIBRARY
+		"$<$<NOT:$<CONFIG:DEBUG>>:${DLIB_RELEASE_LOCATION}>"
+		"$<$<CONFIG:DEBUG>:${DLIB_DEBUG_LOCATION}>"
+)
+
 set_target_properties(dlib::dlib PROPERTIES
 	INTERFACE_COMPILE_OPTIONS ""
 )
