@@ -95,16 +95,16 @@ int main(int argc, const char *argv[])
         //-- Visual feedback, draw face bounding box
         for (int i = 0; i < (int)faces.size(); i++)
         {
-            cv::rectangle(vfeed, faces[i], cv::Scalar(rand() % 256, rand() % 256, rand() % 256, 3));
+            cv::rectangle(vfeed, faces[i], cv::Scalar(rand() % 256, rand() % 256, rand() % 256, 2), 6);
         }
 
         std::cout << faces.size() << " faces detected" << std::endl;
         showImage(vfeed, vfeed_rz, monitor_height);
 
         ///////////////////////////////////////////////////////
-        // STEP 1: Compute face descriptor
+        // STEP 2: Compute face descriptor
         ///////////////////////////////////////////////////////
-        std::cout << "Compuuting face descriptors...";
+        std::cout << "Computing face descriptors...";
         std::fflush(stdout);
         //-- Create and load keypoints detector
         std::string fshape_predictor = parser.get<std::string>("shape_predictor");
@@ -175,6 +175,7 @@ int main(int argc, const char *argv[])
         }
         std::cout << "DONE" << std::endl;
 
+        std::cout << "Drawing image relations..." << std::endl;
         //-- Visual feedback
         float SIM_THRESHOLD = 0.8;
         for (int i = 0; i < dist_L2.rows; i++)
