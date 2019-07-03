@@ -18,6 +18,29 @@ before_install:
 
 install:
 
+  # Download v19.17 .zip file and extract.
+  - curl -sL http://dlib.net/files/dlib-19.17.zip > dlib.zip
+  - unzip dlib.zip
+  - cd dlib-19.17
+  
+  # Create a new 'build' folder.
+  - mkdir build
+  - cd build
+  
+  # Set build instructions for Ubuntu distro.
+  - cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=/usr/local ..
+  
+  # Run 'make' with four threads.
+  - make -j4
+  
+  # Install to OS.
+  - sudo make install
+  
+  - echo "DLib installed."
+  
+  # We need to return to the repo "root" folder, so we can then 'cd' into the C++ project folder.
+  - cd ../../
+
   # OpenCV v3.0.0 (beta) install code (modified from orignal source: https://github.com/jayrambhia/Install-OpenCV)
 
   # OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html
@@ -48,30 +71,6 @@ install:
   
   - sudo ldconfig
   - echo "OpenCV installed."
-  
-  # We need to return to the repo "root" folder, so we can then 'cd' into the C++ project folder.
-  - cd ../../
-
-  # Download v19.17 .zip file and extract.
-  - curl -sL http://dlib.net/files/dlib-19.17.zip > dlib.zip
-  - mkdir dlib-19.17
-  - unzip dlib.zip -d dlib-19.17
-  - cd dlib-19.17
-  
-  # Create a new 'build' folder.
-  - mkdir build
-  - cd build
-  
-  # Set build instructions for Ubuntu distro.
-  - cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=/usr/local ..
-  
-  # Run 'make' with four threads.
-  - make -j4
-  
-  # Install to OS.
-  - sudo make install
-  
-  - echo "DLib installed."
   
   # We need to return to the repo "root" folder, so we can then 'cd' into the C++ project folder.
   - cd ../../
