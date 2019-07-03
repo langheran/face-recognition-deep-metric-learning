@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.2)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE STRING "VSCode Intellisense" FORCE)
-set(CMAKE_C_COMPILER "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/amd64/cl.exe")
-set(CMAKE_CXX_COMPILER "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/amd64/cl.exe")
+if(WIN32)
+	set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE STRING "VSCode Intellisense" FORCE)
+	set(CMAKE_C_COMPILER "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/amd64/cl.exe")
+	set(CMAKE_CXX_COMPILER "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/amd64/cl.exe")
+endif()
 
 set(target_name test_fr_comia)
 project(${target_name} LANGUAGES C CXX)
@@ -32,15 +34,20 @@ endif()
 
 add_executable(${target_name} ${SOURCE}) # ${HEADERS}
 # include(C:/dlib-19.8/dlib/cmake)
-set(DLIB_RELEASE "C:/dlib-19.8/release_build/install/lib/cmake/dlib")
-set(DLIB_DEBUG "C:/dlib-19.8/debug_build/install/lib/cmake/dlib")
-find_package(dlib 
-	HINTS "${DLIB_DEBUG}"
-	NO_PACKAGE_ROOT_PATH
-	NO_CMAKE_PATH
-	NO_CMAKE_ENVIRONMENT_PATH
-	REQUIRED
-) # Look for the precompiled installation instead.
+
+if(WIN32)
+	set(DLIB_RELEASE "C:/dlib-19.8/release_build/install/lib/cmake/dlib")
+	set(DLIB_DEBUG "C:/dlib-19.8/debug_build/install/lib/cmake/dlib")
+	find_package(dlib 
+		HINTS "${DLIB_DEBUG}"
+		NO_PACKAGE_ROOT_PATH
+		NO_CMAKE_PATH
+		NO_CMAKE_ENVIRONMENT_PATH
+		REQUIRED
+	) # Look for the precompiled installation instead.
+else()
+	find_package(dlib)
+endif()
 
 set_target_properties(dlib::dlib PROPERTIES
 	INTERFACE_COMPILE_OPTIONS ""
