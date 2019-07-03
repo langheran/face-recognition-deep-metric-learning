@@ -19,3 +19,9 @@ You can see the whole video session [here](videos/Leonardo%20Chang%20-%2028Jun20
 ### STEP 3: Compute distance for faces M:M
 
 ![-](images/draw_relationships.png)
+
+## Recommended readings
+
+- [Professional CMake: A Practical Guide](https://crascit.com/professional-cmake/).
+- [Learning OpenCV 3: Computer Vision in C++ with the OpenCV Library](https://www.amazon.com.mx/Learning-OpenCV-Computer-Vision-Library/dp/1491937998?source=ps-sl-shoppingads-lpcontext&psc=1).
+- Davis' King [dlib](https://github.com/davisking/dlib).
