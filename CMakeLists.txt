@@ -35,7 +35,7 @@ add_executable(${target_name} ${SOURCE}) # ${HEADERS}
 set(DLIB_RELEASE "C:/dlib-19.8/release_build/install/lib/cmake/dlib")
 set(DLIB_DEBUG "C:/dlib-19.8/debug_build/install/lib/cmake/dlib")
 find_package(dlib 
-	HINTS "${DLIB_RELEASE}"
+	HINTS "${DLIB_DEBUG}"
 	NO_PACKAGE_ROOT_PATH
 	NO_CMAKE_PATH
 	NO_CMAKE_ENVIRONMENT_PATH
