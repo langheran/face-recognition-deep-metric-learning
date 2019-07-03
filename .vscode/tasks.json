@@ -12,6 +12,16 @@
                 "isDefault": true
             },
             "problemMatcher":"$msCompile"
+        },
+        {
+            "label": "build (Release)",
+            "type": "shell",
+            "command": "${workspaceFolder}/release_build_test_fr_comia.bat",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher":"$msCompile"
         }
     ]
 }
