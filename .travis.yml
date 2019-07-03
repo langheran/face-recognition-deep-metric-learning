@@ -14,7 +14,7 @@ before_script:
   - cmake ..
 
 before_install:
-  - sudo apt-get update
+  # - sudo apt-get update
 
 install:
 
