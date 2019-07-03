@@ -17,3 +17,5 @@ You can see the whole video session [here](videos/Leonardo%20Chang%20-%2028Jun20
 ### STEP 2.2: Align face image and obtain face descriptor
 
 ### STEP 3: Compute distance for faces M:M
+
+![-](images/draw_relationships.png)
