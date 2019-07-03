@@ -1,2 +1,2 @@
-java -jar bfg.jar --delete-files common.cpp
-java -jar bfg.jar --delete-files common.h
+java -jar "C:\Bin\bfg.jar" --delete-files common.cpp
+java -jar "C:\Bin\bfg.jar" --delete-files common.h
