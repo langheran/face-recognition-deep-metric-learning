@@ -2,6 +2,8 @@
 #include <string>
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/core/matx.hpp>
 
 #include <dlib/opencv.h>
 #include <dlib/image_processing/frontal_face_detector.h>
@@ -25,16 +27,18 @@ const char *keys_fr_comia =
         "{image |resources/bald_guys.jpg|input image}"
         "{cascade |resources/haarcascade_frontalface_default.xml|haar cascade}"
         "{shape_predictor |resources/shape_predictor_68_face_landmarks.dat|shape predictor}"
-        "{res_net |resources/dlib_face_recognition_resnet_model_v1.dat|resnet model}"
-    };
+        "{res_net |resources/dlib_face_recognition_resnet_model_v1.dat|resnet model}"};
 
-void showImage(cv::Mat& vfeed, cv::Mat& vfeed_rz, float& monitor_height)
+void showImage(cv::Mat &vfeed, cv::Mat &vfeed_rz, float &monitor_height, int seconds = 0)
 {
     vfeed_rz = vfeed.clone();
-    if(vfeed.rows > monitor_height)
+    if (vfeed.rows > monitor_height)
         cv::resize(vfeed, vfeed_rz, cv::Size(), monitor_height / vfeed.rows, monitor_height / vfeed.rows);
     cv::imshow("Faces", vfeed_rz);
-    cv::waitKey();
+    if (!seconds)
+        cv::waitKey();
+    else
+        cv::waitKey(seconds);
 }
 
 int main(int argc, const char *argv[])
@@ -48,7 +52,7 @@ int main(int argc, const char *argv[])
                   << "'" << fimage << "'"
                   << " image...";
         cv::Mat image = cv::imread(fimage, cv::IMREAD_COLOR);
-        if(image.empty())
+        if (image.empty())
         {
             std::cout << "ERROR in " << fimage << std::endl;
             std::cin.get();
@@ -76,7 +80,7 @@ int main(int argc, const char *argv[])
         fflush(stdout);
         cv::CascadeClassifier cascade;
         std::string fcascade = parser.get<std::string>("cascade");
-        if(!cascade.load(fcascade))
+        if (!cascade.load(fcascade))
         {
             std::cout << "ERROR loading: " << fcascade << std::endl;
             std::cin.get();
@@ -84,13 +88,12 @@ int main(int argc, const char *argv[])
         }
         //-- Detect faces
         std::vector<cv::Rect> faces;
-        cascade.detectMultiScale(gray, faces, 1.2, 2, 0 
-        |cv::CASCADE_SCALE_IMAGE
-            // | cv::CASCADE_DO_ROUGH_SEARCH
-            // | cv::CASCADE_FIND_BIGGEST_OBJECT
+        cascade.detectMultiScale(gray, faces, 1.2, 2, 0 | cv::CASCADE_SCALE_IMAGE
+                                 // | cv::CASCADE_DO_ROUGH_SEARCH
+                                 // | cv::CASCADE_FIND_BIGGEST_OBJECT
         );
         //-- Visual feedback, draw face bounding box
-        for (int i = 0; i < (int)faces.size(); i++) 
+        for (int i = 0; i < (int)faces.size(); i++)
         {
             cv::rectangle(vfeed, faces[i], cv::Scalar(rand() % 256, rand() % 256, rand() % 256, 3));
         }
@@ -139,8 +142,55 @@ int main(int argc, const char *argv[])
                 pts.push_back(pt);
             }
             DrawFaceLines(vfeed, pts);
-            showImage(vfeed, vfeed_rz, monitor_height);
+            showImage(vfeed, vfeed_rz, monitor_height, 5);
+
+            ///////////////////////////////////////////////////////
+            // STEP 2.2: Align face image and obtain face descriptor
+            ///////////////////////////////////////////////////////
+
+            //-- Obtain face descriptor for input images
+            bool do_align = true, do_jitter = false;
+            std::vector<cv::Mat> image_v(1, image);
+            cv::Mat descr = fd.get_face_descriptor(image_v, std::vector<cv::Rect>(1, faces[i]), do_jitter, do_align);
+            cv::Mat tm(1, descr.rows, CV_32FC1, descr.data);
+            facedescrs.push_back(tm);
         }
+        std::cout << "\rComputing face descriptors... DONE" << std::endl;
+
+        cv::waitKey();
+
+        ///////////////////////////////////////////////////////
+        // STEP 3: Compute distance for faces M:M
+        ///////////////////////////////////////////////////////
+
+        //-- Compute distance to each other
+        std::cout << "Finding matches...";
+        cv::Mat dist_L2 = cv::Mat::zeros(facedescrs.rows, facedescrs.rows, CV_32FC1);
+        for (int i = 0; i < facedescrs.rows; i++)
+        {
+            for (int j = i + 1; j < facedescrs.rows; j++)
+            {
+                dist_L2.at<float>(i, j) = norm(facedescrs.row(i), facedescrs.row(j), cv::NORM_L2);
+            }
+        }
+        std::cout << "DONE" << std::endl;
+
+        //-- Visual feedback
+        float SIM_THRESHOLD = 0.8;
+        for (int i = 0; i < dist_L2.rows; i++)
+        {
+            for (int j = i; i < dist_L2.rows; j++)
+            {
+                if (dist_L2.at<float>(i,j) < SIM_THRESHOLD)
+                {
+                    cv::Point ptA, ptB;
+                    ClosestPoints(faces[i], faces[j], ptA, ptB);
+                    cv::line(vfeed, ptA, ptB, CV_RGB(255,255,255), 4);
+                    cv::line(vfeed, ptA, ptB, CV_RGB(255,0,0), 2);
+                }
+            }
+        }
+        showImage(vfeed, vfeed_rz, monitor_height);
     }
     catch (cv::Exception &e)
     {
@@ -156,9 +206,7 @@ int main(int argc, const char *argv[])
     }
     catch (...)
     {
-        std::cerr << "Error" << '\n';
+        std:: cout << "Error" << '\n';
     }
-
-    fflush(stdout);
-    std::cin.get();
+    return 1;
 }
