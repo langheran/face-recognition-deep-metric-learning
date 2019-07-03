@@ -1,3 +1,5 @@
+:: Change also the CMakeLists.txt file to point to the CUDA dlib release version.
+
 mkdir build
 cd build
 rd /s /q Release
