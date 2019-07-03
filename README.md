@@ -1,6 +1,7 @@
 # High Quality Face Recognition with Deep Metric Learning
 
  [![Status](https://travis-ci.org/langheran/face-recognition-deep-metric-learning.svg?branch=master)](https://travis-ci.org/langheran/face-recognition-deep-metric-learning)
+ [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://raw.githubusercontent.com/langheran/face-recognition-deep-metric-learning/master/LICENSE)
 
 Presented by Dr. Leonardo Chang on the Deep Learning Workshop 2019 held at ITESM, based on the Davis' King [blog](http://blog.dlib.net/2017/02/high-quality-face-recognition-with-deep.html).
 
