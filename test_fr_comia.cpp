@@ -9,8 +9,8 @@
 #include <dlib/image_processing/frontal_face_detector.h>
 #include <dlib/image_processing.h>
 
-#include "face/FaceDescriptor_dking.h";
-#include "common/common.h";
+#include "face/FaceDescriptor_dking.h"
+#include "common/common.h"
 
 static void help_fr_comia()
 {
