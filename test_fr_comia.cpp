@@ -175,15 +175,16 @@ int main(int argc, const char *argv[])
         }
         std::cout << "DONE" << std::endl;
 
-        std::cout << "Drawing image relations..." << std::endl;
+        std::cout << "Drawing image relationships..." << std::endl;
         //-- Visual feedback
-        float SIM_THRESHOLD = 0.8;
+        float SIM_THRESHOLD = 0.6;
         for (int i = 0; i < dist_L2.rows; i++)
         {
-            for (int j = i; i < dist_L2.rows; j++)
+            for (int j = i + 1; j < dist_L2.rows; j++)
             {
                 if (dist_L2.at<float>(i,j) < SIM_THRESHOLD)
                 {
+                    std::cout << "\rDrawing face relationships..." << i + 1 << ":" << j + 1 << std::endl;
                     cv::Point ptA, ptB;
                     ClosestPoints(faces[i], faces[j], ptA, ptB);
                     cv::line(vfeed, ptA, ptB, CV_RGB(255,255,255), 4);
