@@ -7,6 +7,9 @@
 #include <dlib/image_processing/frontal_face_detector.h>
 #include <dlib/image_processing.h>
 
+#include "face/FaceDescriptor_dking.h";
+#include "common/common.h";
+
 static void help_fr_comia()
 {
     std::cout << "\n****** Workshop DeepLearning 2019 ******\n\n"
@@ -63,6 +66,7 @@ int main(int argc, const char *argv[])
         cv::namedWindow("Faces");
         float monitor_height = 580;
         showImage(vfeed, vfeed_rz, monitor_height);
+
         ///////////////////////////////////////////////////////
         // STEP 1: Detect faces
         ///////////////////////////////////////////////////////
@@ -86,12 +90,57 @@ int main(int argc, const char *argv[])
             // | cv::CASCADE_FIND_BIGGEST_OBJECT
         );
         //-- Visual feedback, draw face bounding box
-        for (int i = 0; i < (int)faces.size(); i++) {
+        for (int i = 0; i < (int)faces.size(); i++) 
+        {
             cv::rectangle(vfeed, faces[i], cv::Scalar(rand() % 256, rand() % 256, rand() % 256, 3));
         }
 
         std::cout << faces.size() << " faces detected" << std::endl;
         showImage(vfeed, vfeed_rz, monitor_height);
+
+        ///////////////////////////////////////////////////////
+        // STEP 1: Compute face descriptor
+        ///////////////////////////////////////////////////////
+        std::cout << "Compuuting face descriptors...";
+        std::fflush(stdout);
+        //-- Create and load keypoints detector
+        std::string fshape_predictor = parser.get<std::string>("shape_predictor");
+        dlib::shape_predictor pose_model;
+        dlib::deserialize(fshape_predictor) >> pose_model;
+
+        //-- Create and load face descriptor
+        std::string fres_net = parser.get<std::string>("res_net");
+        FaceDescriptor_dking fd(fres_net, fshape_predictor);
+
+        //-- Create Mat for face descriptors
+        cv::Mat facedescrs;
+
+        //-- For each face find keypoints
+        for (int i = 0; i < (int)faces.size(); i++)
+        {
+            std::cout << "\rComputing face descriptors..." << i + 1 << " of " << faces.size();
+            std::fflush(stdout);
+            ///////////////////////////////////////////////////////
+            // STEP 2.1: Detect landmarks
+            ///////////////////////////////////////////////////////
+
+            //-- Cast between cv and dlib
+            dlib::rectangle dlib_face_i(faces[i].x, faces[i].y, faces[i].br().x, faces[i].br().y);
+            dlib::cv_image<unsigned char> cimg(gray);
+
+            //-- Find keypoints
+            dlib::full_object_detection shape = pose_model(cimg, dlib_face_i);
+
+            //-- Visual feedback, draw keypoints
+            std::vector<cv::Point2f> pts;
+            for (int i = 0; i < (int)shape.num_parts(); i++)
+            {
+                cv::Point2f pt((float)shape.part(i).x(), (float)shape.part(i).y());
+                pts.push_back(pt);
+            }
+            DrawFaceLines(vfeed, pts);
+            showImage(vfeed, vfeed_rz, monitor_height);
+        }
     }
     catch (cv::Exception &e)
     {

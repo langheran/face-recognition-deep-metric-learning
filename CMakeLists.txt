@@ -15,11 +15,15 @@ set (CMAKE_CXX_STANDARD 11)
 
 set(SOURCE
 			test_fr_comia.cpp
+			face/FaceDescriptor_dking.cpp
+			common/common.cpp
 	)
 
-#set(HEADERS
-#			test_fr_comia.h
-#	)
+set(HEADERS
+			# test_fr_comia.h
+			face/FaceDescriptor_dking.h
+			common/common.h
+	)
 
 find_package(OpenCV REQUIRED)
 if(OpenCV_FOUND)
